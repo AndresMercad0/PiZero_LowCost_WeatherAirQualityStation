@@ -86,8 +86,8 @@ sudo pip3 install adafruit-circuitpython-sgp40
 sudo pip3 install adafruit-circuitpython-ads1x15
 sudo pip3 install gpiozero
 ```
-```bash
 Execute the script with:
+```bash
 python3 codeAllSensors.py
 ```
 
