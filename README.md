@@ -88,7 +88,7 @@ sudo pip3 install gpiozero
 ```
 ```bash
 Execute the script with:
-python3 your_script_name.py
+python3 codeAllSensors.py
 ```
 
 ## License
