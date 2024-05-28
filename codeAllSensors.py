@@ -56,7 +56,7 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
 
   ------------- SGP40 ---------
   * Pinout     =>      https://learn.adafruit.com/assets/98203
-  * Tutorial   =>      https://learn.adafruit.com/adafruit-sgp40/python-circuitpython
+  * Tutorial   =>      https://learn.adafruit.com/adafruit-sgp40/python-circuitpython#python-computer-wiring-3080640
   * Library    =>      python3-pip (sudo apt-get install python3-pip)
                           |->  adafruit-circuitpython-sgp40 (sudo pip3 install adafruit-circuitpython-sgp40)
   *   SGP40             Raspberry Pi Zero W 2

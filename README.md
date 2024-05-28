@@ -30,7 +30,7 @@ Feel free to contact the author by email at andres@mevel.com.mx.
     - [Tutorial](https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/python-circuitpython#python-computer-wiring-3082732)
   - **SGP40 (I2C)**
     - [Pinout](https://learn.adafruit.com/assets/98203)
-    - [Tutorial](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython)
+    - [Tutorial](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython#python-computer-wiring-3080640)
   - **Sparkfun Weather Meter Kit**
     - [Documentation](https://learn.sparkfun.com/tutorials/weather-meter-hookup-guide)
     - [Pinout for ADS1115](https://learn.adafruit.com/assets/112709)
