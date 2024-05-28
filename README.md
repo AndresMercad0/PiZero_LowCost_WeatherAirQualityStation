@@ -49,31 +49,31 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ### SHT45 Sensor
 ```
-  *   SHT45             Raspberry Pi Zero W 2
-  *   1 VIN ---------------- 3.3V - Pin 1
-  *   2 GND ---------------- GND - Pin 6
-  *   3 SCL ---------------- SCL - Pin 5
-  *   4 SDA ---------------- SDA - Pin 3
+    SHT45              Raspberry Pi Zero W 2
+    1 VIN ---------------- 3.3V - Pin 1
+    2 GND ---------------- GND - Pin 6
+    3 SCL ---------------- SCL - Pin 5
+    4 SDA ---------------- SDA - Pin 3
 ```
 
 ### SGP40 Sensor
 ```
-  *   SGP40             Raspberry Pi Zero W 2
-  *   1 VIN ---------------- 3.3V - Pin 1
-  *   2 GND ---------------- GND - Pin 6
-  *   3 SCL ---------------- SCL - Pin 5
-  *   4 SDA ---------------- SDA - Pin 3
+    SGP40              Raspberry Pi Zero W 2
+    1 VIN ---------------- 3.3V - Pin 1
+    2 GND ---------------- GND - Pin 6
+    3 SCL ---------------- SCL - Pin 5
+    4 SDA ---------------- SDA - Pin 3
 ```
 
 ### Wind Speed and Direction (Sparkfun Weather Meter Ki) & ADS1115
 ```
-  *   Raspberry Pi Zero W 2                           ADS1115            Weather Meter Kit
-  *       3.3V - Pin 1   -------------------------------- VIN ------------------ RED
-  *       GND - Pin 6    -------------------------------- GND ------------------ BLACK
-  *       SCL - Pin 5    -------------------------------- SCL 
-  *       SDA - Pin 3    -------------------------------- SDA
-  *       3.3V - Pin 1   --------- 10k resistor ---------  A0 ------------------ GREEN
-  *       GPIO 4 - Pin 7 ------------------------------------------------------- YELLOW
+    Raspberry Pi Zero W 2                             ADS1115            Weather Meter Kit
+        3.3V - Pin 1   -------------------------------- VIN ------------------ RED
+        GND - Pin 6    -------------------------------- GND ------------------ BLACK
+        SCL - Pin 5    -------------------------------- SCL 
+        SDA - Pin 3    -------------------------------- SDA
+        3.3V - Pin 1   --------- 10k resistor ---------  A0 ------------------ GREEN
+        GPIO 4 - Pin 7 ------------------------------------------------------- YELLOW
 ```
 
 ## Execution
