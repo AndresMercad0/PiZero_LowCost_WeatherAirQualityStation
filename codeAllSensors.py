@@ -22,12 +22,13 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
 1. SHT45 (I2C)
 2. SGP40 (I2C)
 3. Wind Speed and Direction - Sparkfun Weather Meter Kit (Speed: Digital, Direction: Analogue)
+4. SPS30 (I2C)
 
 '''
 
 
 '''
-  DATE:             2024-May-28 2:24 PM London Time
+  DATE:             2024-May-30 5:52 PM London Time
   AUTHOR:           Andres A. Mercado-Velazquez
   LOCATION:         IoT Lab at Queen Mary University of London
   BOARD:            Raspberry Pi Zero W 2
@@ -35,36 +36,66 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
                     https://pinout.xyz
   REPO/CODE:
 
-  ------------------------------------------
-  | Connecting Devices/Sensors to the Board |
-  ------------------------------------------
+
+  #################################################################################
+  #                    CONNECTING DEVICES/SENSORS TO THE BOARD                    #
+  #################################################################################
 
   ------------------------------------------------------------------------------------------------
                                             I2C
   ------------------------------------------------------------------------------------------------
 
-  ------------- SHT45 ---------
+  ------------- SHT45 -----------------------------------------------------------------------------------------------------------------
   * Pinout     =>      https://learn.adafruit.com/assets/99235
   * Tutorial   =>      https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/python-circuitpython#python-computer-wiring-3082732
   * Library    =>      python3-pip (sudo apt-get install python3-pip)
                           |->  adafruit-circuitpython-sht4x (sudo pip3 install adafruit-circuitpython-sht4x)
-  *   SHT45             Raspberry Pi Zero W 2
-  *   1 VIN ---------------- 3.3V - Pin 1
-  *   2 GND ---------------- GND - Pin 6
-  *   3 SCL ---------------- SCL - Pin 5
-  *   4 SDA ---------------- SDA - Pin 3
 
-  ------------- SGP40 ---------
+    SHT45             Raspberry Pi Zero W 2
+    1 VIN ---------------- 3.3V - Pin 1
+    2 GND ---------------- GND - Pin 6
+    3 SCL ---------------- SCL - Pin 5
+    4 SDA ---------------- SDA - Pin 3
+
+  ------------- SGP40 -----------------------------------------------------------------------------------------------------------------
   * Pinout     =>      https://learn.adafruit.com/assets/98203
   * Tutorial   =>      https://learn.adafruit.com/adafruit-sgp40/python-circuitpython#python-computer-wiring-3080640
   * Library    =>      python3-pip (sudo apt-get install python3-pip)
                           |->  adafruit-circuitpython-sgp40 (sudo pip3 install adafruit-circuitpython-sgp40)
-  *   SGP40             Raspberry Pi Zero W 2
-  *   1 VIN ---------------- 3.3V - Pin 1
-  *   2 GND ---------------- GND - Pin 6
-  *   3 SCL ---------------- SCL - Pin 5
-  *   4 SDA ---------------- SDA - Pin 3
+
+    SGP40             Raspberry Pi Zero W 2
+    1 VIN ---------------- 3.3V - Pin 1
+    2 GND ---------------- GND - Pin 6
+    3 SCL ---------------- SCL - Pin 5
+    4 SDA ---------------- SDA - Pin 3
+
+  ------------- SPS30 -----------------------------------------------------------------------------------------------------------------
+  * Pinout     =>      https://cdn.sparkfun.com/assets/2/d/2/a/6/Sensirion_SPS30_Particulate_Matter_Sensor_v0.9_D1__1_.pdf
+  * Tutorial   =>      https://github.com/dvsu/sps30/tree/main?tab=readme-ov-file#sensirion-sps30
+  * Library    =>      https://github.com/dvsu/sps30/blob/main/sps30.py
+                          |->  The file "sps30.py" from the public repository https://github.com/dvsu/sps30.git is responsible for managing the i2c communication with the SPS30 sensor. This file is invoked by "codeAllSensors.py" and is included in this repository.
+
+    SPS30                        Raspberry Pi Zero W 2
+    Pin 1 - VDD ---------------- 5V - Pin 2/4
+    Pin 2 - SDA ---------------- SDA - Pin 3
+    Pin 3 - SCL ---------------- SCL - Pin 5
+    Pin 4 - SEL ----.----------- GND - Pin 6/9
+    Pin 5 - GND ----'
+
+        .-------------------------------------------------.
+        |  SPS30 PINOUT By Dave (https://github.com/dvsu) |
+        '-------------------------------------------------'
+                                           Pin 1   Pin 5
+                                           |       |
+                                           V       V
+        .------------------------------------------------.
+        |                                .-----------.   |
+        |                                | x x x x x |   |
+        |                                '-----------'   |
+        |     []          []          []          []     |
+        '------------------------------------------------'
   
+
   ------------------------------------------------------------------------------------------------
                                   Analogue or digital communication
   ------------------------------------------------------------------------------------------------
@@ -74,13 +105,14 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
   * Tutorial                 =>      https://projects.raspberrypi.org/en/projects/build-your-own-weather-station/5
   * Library                  =>      python3-pip (sudo apt-get install python3-pip)
                                        |->  adafruit-circuitpython-ads1x15 (sudo pip3 install adafruit-circuitpython-ads1x15)
-  *   Raspberry Pi Zero W 2                           ADS1115            Weather Meter Kit
-  *       3.3V - Pin 1   -------------------------------- VIN ------------------ RED
-  *       GND - Pin 6    -------------------------------- GND ------------------ BLACK
-  *       SCL - Pin 5    -------------------------------- SCL 
-  *       SDA - Pin 3    -------------------------------- SDA
-  *       3.3V - Pin 1   --------- 10k resistor ---------  A0 ------------------ GREEN
-  *       GPIO 4 - Pin 7 ------------------------------------------------------- YELLOW
+
+    Raspberry Pi Zero W 2                             ADS1115             Weather Meter Kit
+        GND - Pin 6    -------------------------------- GND ------------------ BLACK
+        3.3V - Pin 1   -----.-------------------------- VIN ------------------ RED
+                            '----- 10k resistor -------  A0 ------------------ GREEN
+        GPIO 4 - Pin 7 ------------------------------------------------------- YELLOW
+        SCL - Pin 5    -------------------------------- SCL
+        SDA - Pin 3    -------------------------------- SDA
 
 '''
 
@@ -91,6 +123,7 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
 # General Purpose
 import time
 import math
+import json
 import board # I2C
 # SHT45
 import adafruit_sht4x
@@ -101,6 +134,8 @@ from gpiozero import Button
 # Wind Direction - ADS1115 for Weather Meter Kit
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+# SPS30
+from sps30library.sps30 import SPS30
 
 
 
@@ -140,7 +175,15 @@ wind_speed_sensor = Button(WIND_SPEED_SENSOR_PIN, pull_up=False) # Setup wind se
 # Wind Direction - ADS1115 for Weather Meter Kit
 ads = ADS.ADS1115(i2c)
 wind_dir = AnalogIn(ads, ADS.P0)
-
+# SPS30
+pm_sensor = SPS30()
+print(f"Firmware version: {pm_sensor.firmware_version()}")
+print(f"Product type: {pm_sensor.product_type()}")
+print(f"Serial number: {pm_sensor.serial_number()}")
+print(f"Status register: {pm_sensor.read_status_register()}")
+print(f"Auto cleaning interval: {pm_sensor.read_auto_cleaning_interval()}s")
+pm_sensor.start_measurement()
+sleep(5)
 
 
 '''
@@ -193,8 +236,11 @@ def read_wind_direction():
 
 def main():
     while True:
+
+        print("-----------------------------------")
+
         ################
-	      #  READ SHT45  #
+	    #  READ SHT45  #
         ################
         # Read temperature and humidity
         temperature, humidity = sht.measurements
@@ -202,7 +248,7 @@ def main():
         print(f"Humidity: {humidity:.1f} %")
         
         ################
-	      #  READ SGP40  #
+	    #  READ SGP40  #
         ################
         # Read and compensate raw gas measurements
         compensated_raw_gas = sgp.measure_raw(temperature=temperature, relative_humidity=humidity)
@@ -211,7 +257,7 @@ def main():
         
         
         ###################################
-	      #  READ Wind speed and direction  #
+	    #  READ Wind speed and direction  #
         ###################################
         # Read wind direction
         angle = read_wind_direction()
@@ -221,12 +267,19 @@ def main():
             print("Wind direction not found")
         # Read wind speed
         calculate_wind_speed()
-        
-        
+
+        ################
+        #  READ SPS30  #
+        ################
+        # Read particulate matter data
+        pm_data = pm_sensor.get_measurement()
+        if pm_data:
+            print(json.dumps(pm_data, indent=2))
+        else:
+            print("Failed to read from SPS30 sensor")
         
         
         # Wait before the next measurement
-        print("")
         time.sleep(1)
 
 if __name__ == "__main__":

@@ -1,6 +1,4 @@
-# README
-
-## A Raspberry Pi Zero W 2 based weather and air quality station with low-cost sensors
+# A Raspberry Pi Zero W 2 based weather and air quality monitoring station with low-cost sensors
 
 ## Overview
 
@@ -14,7 +12,7 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ## Date and Location
 
-- **Date:** 2024-May-28 2:24 PM London Time
+- **Date:** 2024-May-30 5:52 PM London Time
 - **Author:** Andres A. Mercado-Velazquez
 - **Location:** IoT Lab at Queen Mary University of London
 
@@ -35,6 +33,10 @@ Feel free to contact the author by email at andres@mevel.com.mx.
     - [Documentation](https://learn.sparkfun.com/tutorials/weather-meter-hookup-guide)
     - [Pinout for ADS1115](https://learn.adafruit.com/assets/112709)
     - [Tutorial](https://projects.raspberrypi.org/en/projects/build-your-own-weather-station/5)
+  - **SPS30 (I2C)**
+    - [Pinout](https://cdn.sparkfun.com/assets/2/d/2/a/6/Sensirion_SPS30_Particulate_Matter_Sensor_v0.9_D1__1_.pdf)
+    - [Tutorial](https://github.com/dvsu/sps30/tree/main?tab=readme-ov-file#sensirion-sps30)
+
 
 ## Software Requirements
 
@@ -67,13 +69,36 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ### Wind Speed and Direction (Sparkfun Weather Meter Ki) & ADS1115
 ```
-    Raspberry Pi Zero W 2                             ADS1115            Weather Meter Kit
-        3.3V - Pin 1   -------------------------------- VIN ------------------ RED
+    Raspberry Pi Zero W 2                             ADS1115             Weather Meter Kit
         GND - Pin 6    -------------------------------- GND ------------------ BLACK
-        SCL - Pin 5    -------------------------------- SCL 
-        SDA - Pin 3    -------------------------------- SDA
-        3.3V - Pin 1   --------- 10k resistor ---------  A0 ------------------ GREEN
+        3.3V - Pin 1   -----.-------------------------- VIN ------------------ RED
+                            '----- 10k resistor -------  A0 ------------------ GREEN
         GPIO 4 - Pin 7 ------------------------------------------------------- YELLOW
+        SCL - Pin 5    -------------------------------- SCL
+        SDA - Pin 3    -------------------------------- SDA
+```
+
+### SPS30 Sensor
+```
+    SPS30                        Raspberry Pi Zero W 2
+    Pin 1 - VDD ---------------- 5V - Pin 2/4
+    Pin 2 - SDA ---------------- SDA - Pin 3
+    Pin 3 - SCL ---------------- SCL - Pin 5
+    Pin 4 - SEL ----.----------- GND - Pin 6/9
+    Pin 5 - GND ----'
+
+        .-------------------------------------------------.
+        |  SPS30 PINOUT By Dave (https://github.com/dvsu) |
+        '-------------------------------------------------'
+                                           Pin 1   Pin 5
+                                           |       |
+                                           V       V
+        .------------------------------------------------.
+        |                                .-----------.   |
+        |                                | x x x x x |   |
+        |                                '-----------'   |
+        |     []          []          []          []     |
+        '------------------------------------------------'
 ```
 
 ## Execution
@@ -81,18 +106,25 @@ To run the code, ensure you have Python 3 installed along with the necessary lib
 
 ```bash
 sudo apt-get install python3-pip
+sudo pip3 install gpiozero
 sudo pip3 install adafruit-circuitpython-sht4x
 sudo pip3 install adafruit-circuitpython-sgp40
 sudo pip3 install adafruit-circuitpython-ads1x15
-sudo pip3 install gpiozero
 ```
 Execute the script with:
 ```bash
 python3 codeAllSensors.py
 ```
 
+## To-do
+- [x] SHT45 (I2C)
+- [x] SGP40 (I2C)
+- [x] Wind speed and direction (Sparkfun Weather Meter Kit) & ADS1115 (I2C)
+- [x] SPS30 (I2C)
+- [ ] Grove Multichannel Gas Sensor V2
+
 ## License
+[MIT](https://choosealicense.com/licenses/mit/)
 
-This code is licensed under the MIT License. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-
-Although it is not a requirement of the license, the author, Andres A. Mercado-Velazquez, would appreciate it if you give credit when using or distributing this code.
+> [!NOTE]
+> Although it is not a requirement of the license, the author, Andres A. Mercado-Velazquez, would appreciate it if you give credit when using or distributing this code.
