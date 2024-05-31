@@ -12,7 +12,7 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ## Date and Location
 
-- **Date:** 2024-May-30 5:52 PM London Time
+- **Date:** 2024-May-31 8:27 PM London Time
 - **Author:** Andres A. Mercado-Velazquez
 - **Location:** IoT Lab at Queen Mary University of London
 
@@ -24,31 +24,30 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 - **Sensors**
   - **SHT45 (I2C)**
-    - [Pinout](https://learn.adafruit.com/assets/99235)
-    - [Tutorial](https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/python-circuitpython#python-computer-wiring-3082732)
+    - [Documentation](https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/python-circuitpython)
   - **SGP40 (I2C)**
-    - [Pinout](https://learn.adafruit.com/assets/98203)
-    - [Tutorial](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython#python-computer-wiring-3080640)
+    - [Documentation](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython)
   - **Sparkfun Weather Meter Kit**
     - [Documentation](https://learn.sparkfun.com/tutorials/weather-meter-hookup-guide)
-    - [Pinout for ADS1115](https://learn.adafruit.com/assets/112709)
-    - [Tutorial](https://projects.raspberrypi.org/en/projects/build-your-own-weather-station/5)
+    - **ADS1115**
+      - [Documentation](https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython)
   - **SPS30 (I2C)**
-    - [Pinout](https://cdn.sparkfun.com/assets/2/d/2/a/6/Sensirion_SPS30_Particulate_Matter_Sensor_v0.9_D1__1_.pdf)
-    - [Tutorial](https://github.com/dvsu/sps30/tree/main?tab=readme-ov-file#sensirion-sps30)
-
+    - [Documentation](https://cdn.sparkfun.com/assets/2/d/2/a/6/Sensirion_SPS30_Particulate_Matter_Sensor_v0.9_D1__1_.pdf)
+- **Grove - Multichannel Gas Sensor v2**
+  - [Info](https://wiki.seeedstudio.com/Grove-Multichannel-Gas-Sensor-V2/)
 
 ## Software Requirements
-
 - Python 3
 - Required Python libraries:
   - `adafruit-circuitpython-sht4x`
   - `adafruit-circuitpython-sgp40`
   - `adafruit-circuitpython-ads1x15`
   - `gpiozero`
+  - `adafruit-circuitpython-busdevice`
+  - `adafruit-circuitpython-board`
+  - `adafruit-blinka`
 
 ## Setup and Wiring
-
 ### SHT45 Sensor
 ```
     SHT45              Raspberry Pi Zero W 2
@@ -101,6 +100,15 @@ Feel free to contact the author by email at andres@mevel.com.mx.
         '------------------------------------------------'
 ```
 
+### Grove Multichannel Gas v2
+```
+    Grove Multichannel Gas V2         Raspberry Pi Zero W 2
+        1 GND -------------------------- GND - Pin 6/9
+        2 VCC -------------------------- 5V - Pin 2/4
+        3 SDA -------------------------- SDA - Pin 3
+        4 SCL -------------------------- SCL - Pin 5
+```
+
 ## Execution
 To run the code, ensure you have Python 3 installed along with the necessary libraries. You can install the required libraries using the following commands:
 
@@ -110,18 +118,38 @@ sudo pip3 install gpiozero
 sudo pip3 install adafruit-circuitpython-sht4x
 sudo pip3 install adafruit-circuitpython-sgp40
 sudo pip3 install adafruit-circuitpython-ads1x15
+sudo pip3 install adafruit-circuitpython-board
 ```
-Execute the script with:
+
+### Run the code
+1. Clone this repo to your directory using the command:
 ```bash
-python3 codeAllSensors.py
+git clone https://github.com/AndresMercad0/RPi-MultichannelGasV2-PythonLib.git
 ```
+2. Run the code with the command:
+```bash
+python3 GroveMGSv2.py
+```
+
+
+
+> [!WARNING]
+> ## CALIBRATE SENSOR Grove Multichannel Gas v2
+> by Veselin Hadzhiyski 2021 (vcoder@abv.bg)
+> ### How to calibrate?
+> Visit [this Repo](https://github.com/AndresMercad0/RPi-MultichannelGasV2-PythonLib), clone it, and run the script. Wait for the sensor to heat up. If this is the sensor's first run, you must preheat it for more than 72 hours. If it's already preheated, run it for a few hours to achieve stable parameters. After that, note the R_gas value.
+> 
+> Next, record the R_gas value as the R0 value in this script. Specifically, write the R_gas value as the R0 value in "codeAllSensors.py". Please ensure you follow the calibration instructions on [this Repo](https://github.com/AndresMercad0/RPi-MultichannelGasV2-PythonLib).
+> 
+> And that's it! The sensor is ready for operation.
 
 ## To-do
 - [x] SHT45 (I2C)
 - [x] SGP40 (I2C)
 - [x] Wind speed and direction (Sparkfun Weather Meter Kit) & ADS1115 (I2C)
 - [x] SPS30 (I2C)
-- [ ] Grove Multichannel Gas Sensor V2
+- [x] Grove Multichannel Gas Sensor V2 (I2C)
+- [ ] MQ131 & ADS1115 (I2C)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

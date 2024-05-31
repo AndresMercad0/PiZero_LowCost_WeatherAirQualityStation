@@ -23,18 +23,19 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
 2. SGP40 (I2C)
 3. Wind Speed and Direction - Sparkfun Weather Meter Kit (Speed: Digital, Direction: Analogue)
 4. SPS30 (I2C)
+5. Grove - Gas Sensor V2 (Multichannel) - I2C
 
 '''
 
 
 '''
-  DATE:             2024-May-30 5:52 PM London Time
+  DATE:             2024-May-31 8:56 PM London Time
   AUTHOR:           Andres A. Mercado-Velazquez
   LOCATION:         IoT Lab at Queen Mary University of London
   BOARD:            Raspberry Pi Zero W 2
   BOARD DOC:        https://www.raspberrypi.com/products/raspberry-pi-zero-2-w/
                     https://pinout.xyz
-  REPO/CODE:
+  REPO/CODE:        https://github.com/AndresMercad0/PiZero_LowCost_WeatherAirQualityStation
 
 
   #################################################################################
@@ -95,6 +96,32 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
         |     []          []          []          []     |
         '------------------------------------------------'
   
+  ------------- Grove - Gas Sensor V2 (Multichannel) -----------------------------------------------------------------------------------------------------------------
+  * Pinout     =>      https://wiki.seeedstudio.com/Grove-Multichannel-Gas-Sensor-V2/
+  * Source     =>      https://github.com/Seeed-Studio/Seeed_Arduino_MultiGas
+  * Library    =>      python3-pip (sudo apt-get install python3-pip)
+                                       |->  adafruit-circuitpython-board (sudo pip3 adafruit-circuitpython-board)
+
+    Grove Multichannel gas V2         Raspberry Pi Zero W 2
+        1 GND -------------------------- GND - Pin 6
+        2 VCC -------------------------- 5V - Pin 4
+        3 SDA -------------------------- SDA - Pin 3
+        4 SCL -------------------------- SCL - Pin 5
+
+        .-------------------------------------------------------------------.
+        |                Calibrate Grove Multichannel Gas v2                |
+        '-------------------------------------------------------------------'
+        by Veselin Hadzhiyski 2021 (vcoder@abv.bg)
+
+        How to calibrate?
+        |
+        '->  Visit [this Repo](https://github.com/AndresMercad0/RPi-MultichannelGasV2-PythonLib), clone it, and run the script.
+             Wait for the sensor to heat up. If this is the sensor's first run, you must preheat it for more than 72 hours.
+             If it's already preheated, run it for a few hours to achieve stable parameters. After that, note the R_gas value.
+             Next, record the R_gas value as the R0 value in this script. Specifically, write the R_gas value as the R0 value in "codeAllSensors.py".
+             Please ensure you follow the calibration instructions on [this Repo](https://github.com/AndresMercad0/RPi-MultichannelGasV2-PythonLib).
+             And that's it! After edit the "R0" value in this code the sensor is ready for operation.
+
 
   ------------------------------------------------------------------------------------------------
                                   Analogue or digital communication
@@ -136,6 +163,8 @@ import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 # SPS30
 from sps30library.sps30 import SPS30
+# Grove - Gas Sensor V2 (Multichannel)
+from MGSv2Lib.multichannel_gas_gmxxx import MultichannelGasGMXXX
 
 
 
@@ -151,6 +180,10 @@ SENSOR_DIAMETER_CM = 18  # Wind speed sensor diameter in cm
 SENSOR_MAX = [1800, 2250, 2500, 3325, 4825, 6325, 7425, 10425, 11825, 15325, 16100, 17900, 20000, 21050, 22550, 24000]
 SENSOR_MIN = [1550, 2000, 2251, 3075, 4575, 6075, 7175, 10175, 11575, 15075, 15850, 17650, 19750, 20800, 22300, 23750]
 DIR_DEG = [22.5, 337.5, 0, 67.5, 45, 112.5, 90, 292.5, 315, 157.5, 135, 247.5, 270, 202.5, 225, 180]
+
+# Grove - Gas Sensor V2 (Multichannel)
+R0_CO = 31 # This value is obtained from the ambient air and must be determined through sensor calibration, as referenced in the code's initial comments.
+R0_NO2 = 40 # This value is obtained from the ambient air and must be determined through sensor calibration, as referenced in the code's initial comments.
 
 
 '''
@@ -183,7 +216,10 @@ print(f"Serial number: {pm_sensor.serial_number()}")
 print(f"Status register: {pm_sensor.read_status_register()}")
 print(f"Auto cleaning interval: {pm_sensor.read_auto_cleaning_interval()}s")
 pm_sensor.start_measurement()
-sleep(5)
+# Init Grove - Gas Sensor V2 (Multichannel)
+gas_sensor = MultichannelGasGMXXX(i2c)
+time.sleep(5)
+
 
 
 '''
@@ -277,6 +313,91 @@ def main():
             print(json.dumps(pm_data, indent=2))
         else:
             print("Failed to read from SPS30 sensor")
+
+
+        ###########################################
+        #  READ GROVE MULTICHANNEL GAS SENSOR V2  #
+        ###########################################
+        val = gas_sensor.measure_no2()
+        print(f"NO2: {val}  =  {gas_sensor.calc_vol(val)}V")
+        val = gas_sensor.measure_c2h5oh()
+        print(f"C2H5OH: {val}  =  {gas_sensor.calc_vol(val)}V")
+        val = gas_sensor.measure_voc()
+        print(f"VOC: {val}  =  {gas_sensor.calc_vol(val)}V")
+        val = gas_sensor.measure_co()
+        print(f"CO: {val}  =  {gas_sensor.calc_vol(val)}V")
+        '''
+        -------------------------  PPM CO  -------------------------
+        CO range: 0 - 1000 PPM
+        Calibrated according calibration curve by Winsen: 0 - 150 PPM
+        Calibration by Veselin Hadzhiyski 2021 (vcoder@abv.bg)
+
+        RS/R0       PPM
+        1           0
+        0.77        1
+        0.6         3
+        0.53        5
+        0.4         10
+        0.29        20
+        0.21        50
+        0.17        100
+        0.15        150
+        '''
+        print("----- PPM CO -----")
+        sensorValue = gas_sensor.measure_co()
+        sensor_volt = gas_sensor.calc_vol(sensorValue)
+        print(f"CO: {sensorValue}  eq  {sensor_volt}V")
+
+        RS_gas = (3.3-sensor_volt)/sensor_volt
+        print(f"RS_gas: {RS_gas}")
+
+        global R0_CO
+        R0_CO = 31 # This value is obtained from the ambient air and must be determined through sensor calibration, as referenced in the code's initial comments.
+        print(f"R0_CO: {R0_CO}")
+
+        ratio =  RS_gas/R0_CO
+        print(f"ratio: {ratio}")
+        
+        lgPPM = (math.log10(ratio) * -3.82) - 0.66  # - 3.82) - 0.66; - default      - 2.82) - 0.12; - best for range up to 150 ppm
+        PPM = pow(10,lgPPM)
+        print(f"PPM: {PPM}")
+        '''
+        -------------------------  PPM NO2  -------------------------
+        NO2 range: 0 - 10 PPM
+        Calibrated according calibration curve by Winsen: 0 - 10 PPM
+        Calibration by Veselin Hadzhiyski 2021 (vcoder@abv.bg)
+
+        RS/R0       PPM
+        1           0
+        1.4         1
+        1.8         2
+        2.25        3
+        2.7         4
+        3.1         5
+        3.4         6
+        3.8         7
+        4.2         8
+        4.4         9
+        4.7         10
+        '''
+        print("----- PPM NO2 -----")
+        sensorValue = gas_sensor.measure_no2()
+        sensor_volt = gas_sensor.calc_vol(sensorValue)
+        print(f"NO2: {sensorValue}  eq  {sensor_volt}V")
+
+        RS_gas = (3.3-sensor_volt)/sensor_volt
+        print(f"RS_gas: {RS_gas}")
+
+        global R0_NO2
+        R0_NO2 = 40 # This value is obtained from the ambient air and must be determined through sensor calibration, as referenced in the code's initial comments.
+        print(f"R0_NO2: {R0_NO2}")
+
+        ratio =  RS_gas/R0_NO2
+        print(f"ratio: {ratio}")
+
+        lgPPM = (math.log10(ratio) * + 1.9) - 0.2  # + 2   -0.3
+        PPM = pow(10,lgPPM)
+        print(f"PPM: {PPM}")
         
         
         # Wait before the next measurement
