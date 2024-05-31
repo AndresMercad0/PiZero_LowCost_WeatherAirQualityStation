@@ -39,13 +39,11 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 ## Software Requirements
 - Python 3
 - Required Python libraries:
+  - `gpiozero`
+  - `adafruit-circuitpython-busdevice`
   - `adafruit-circuitpython-sht4x`
   - `adafruit-circuitpython-sgp40`
   - `adafruit-circuitpython-ads1x15`
-  - `gpiozero`
-  - `adafruit-circuitpython-busdevice`
-  - `adafruit-circuitpython-board`
-  - `adafruit-blinka`
 
 ## Setup and Wiring
 ### SHT45 Sensor
@@ -115,10 +113,10 @@ To run the code, ensure you have Python 3 installed along with the necessary lib
 ```bash
 sudo apt-get install python3-pip
 sudo pip3 install gpiozero
+sudo pip3 install adafruit-circuitpython-board
 sudo pip3 install adafruit-circuitpython-sht4x
 sudo pip3 install adafruit-circuitpython-sgp40
 sudo pip3 install adafruit-circuitpython-ads1x15
-sudo pip3 install adafruit-circuitpython-board
 ```
 
 ### Run the code
