@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project demonstrates the implementation of a weather and air quality monitoring system using the Raspberry Pi Zero W 2 and a set of low-cost sensors. The sensors included in this setup are the SHT45 for temperature and humidity, the SGP40 for gas measurements, and the Sparkfun Weather Meter Kit for measuring wind speed and direction.
+This project demonstrates the implementation of a weather and air quality monitoring system using the Raspberry Pi Zero W 2 and a set of low-cost sensors. The sensors included in this setup are the SHT45 for temperature and humidity, the SGP40 for gas measurements, the SPS30 for particulate matter (PM) PM10 and PM2.5, the Grove - Gas Sensor V2 (Multichannel) for CO and NO2, and the Sparkfun Weather Meter Kit for measuring wind speed and direction.
 
 The following documentation provides detailed instructions on setting up the sensors, wiring them to the Raspberry Pi, and running the provided Python code to gather and display environmental data.
 
@@ -12,7 +12,7 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ## Date and Location
 
-- **Date:** 2024-May-31 8:27 PM London Time
+- **Date:** 2024-Jun-12 5:45 PM London Time
 - **Author:** Andres A. Mercado-Velazquez
 - **Location:** IoT Lab at Queen Mary University of London
 
@@ -23,24 +23,27 @@ Feel free to contact the author by email at andres@mevel.com.mx.
   - [Raspberry Pi Pinout](https://pinout.xyz)
 
 - **Sensors**
-  - **SHT45 (I2C)**
-    - [Documentation](https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/python-circuitpython)
-  - **SGP40 (I2C)**
-    - [Documentation](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython)
-  - **Sparkfun Weather Meter Kit**
-    - [Documentation](https://learn.sparkfun.com/tutorials/weather-meter-hookup-guide)
-    - **ADS1115**
-      - [Documentation](https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython)
-  - **SPS30 (I2C)**
-    - [Documentation](https://cdn.sparkfun.com/assets/2/d/2/a/6/Sensirion_SPS30_Particulate_Matter_Sensor_v0.9_D1__1_.pdf)
-- **Grove - Multichannel Gas Sensor v2**
-  - [Info](https://wiki.seeedstudio.com/Grove-Multichannel-Gas-Sensor-V2/)
+  - **I2C**
+    - **SHT45 (I2C)**
+      - [Documentation](https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/python-circuitpython)
+    - **SGP40 (I2C)**
+      - [Documentation](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython)
+    - **SPS30 (I2C)**
+      - [Documentation](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython)
+    - **Grove - Multichannel Gas Sensor v2 (I2C)**
+      - [Documentation](https://wiki.seeedstudio.com/Grove-Multichannel-Gas-Sensor-V2/)
+  - **Analogue or digital communication**
+    - **Sparkfun Weather Meter Kit**
+      - [Documentation](https://learn.sparkfun.com/tutorials/weather-meter-hookup-guide)
+      - **ADS1115**
+        - [Documentation](https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython)
+
 
 ## Software Requirements
-- Python 3
-- Required Python libraries:
+- Python 3 (sudo pip3 install name_of_module)
+- Required Python libraries (name_of_module):
   - `gpiozero`
-  - `adafruit-circuitpython-busdevice`
+  - `adafruit-circuitpython-board`
   - `adafruit-circuitpython-sht4x`
   - `adafruit-circuitpython-sgp40`
   - `adafruit-circuitpython-ads1x15`
@@ -48,7 +51,8 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 ## Setup and Wiring
 ### SHT45 Sensor
 ```
-    SHT45              Raspberry Pi Zero W 2
+    SHT45             Raspberry Pi Zero W 2
+    ---------------------------------------
     1 VIN ---------------- 3.3V - Pin 1
     2 GND ---------------- GND - Pin 6
     3 SCL ---------------- SCL - Pin 5
@@ -57,27 +61,18 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ### SGP40 Sensor
 ```
-    SGP40              Raspberry Pi Zero W 2
+    SGP40             Raspberry Pi Zero W 2
+    ---------------------------------------
     1 VIN ---------------- 3.3V - Pin 1
     2 GND ---------------- GND - Pin 6
     3 SCL ---------------- SCL - Pin 5
     4 SDA ---------------- SDA - Pin 3
 ```
 
-### Wind Speed and Direction (Sparkfun Weather Meter Ki) & ADS1115
-```
-    Raspberry Pi Zero W 2                             ADS1115             Weather Meter Kit
-        GND - Pin 6    -------------------------------- GND ------------------ BLACK
-        3.3V - Pin 1   -----.-------------------------- VIN ------------------ RED
-                            '----- 10k resistor -------  A0 ------------------ GREEN
-        GPIO 4 - Pin 7 ------------------------------------------------------- YELLOW
-        SCL - Pin 5    -------------------------------- SCL
-        SDA - Pin 3    -------------------------------- SDA
-```
-
 ### SPS30 Sensor
 ```
-    SPS30                        Raspberry Pi Zero W 2
+     SPS30                        Raspberry Pi Zero W 2
+    --------------------------------------------------
     Pin 1 - VDD ---------------- 5V - Pin 2/4
     Pin 2 - SDA ---------------- SDA - Pin 3
     Pin 3 - SCL ---------------- SCL - Pin 5
@@ -100,12 +95,52 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ### Grove Multichannel Gas v2
 ```
-    Grove Multichannel Gas V2         Raspberry Pi Zero W 2
+    Grove Multichannel gas V2         Raspberry Pi Zero W 2
+    -------------------------------------------------------
         1 GND -------------------------- GND - Pin 6/9
         2 VCC -------------------------- 5V - Pin 2/4
         3 SDA -------------------------- SDA - Pin 3
         4 SCL -------------------------- SCL - Pin 5
 ```
+
+### Wind Speed and Direction (Sparkfun Weather Meter Ki) & ADS1115
+```
+    Raspberry Pi Zero W 2                             ADS1115           Weather Meter Kit
+    -------------------------------------------------------------------------------------
+        SCL - Pin 5    -------------------------------- SCL                      
+        SDA - Pin 3    -------------------------------- SDA                      
+        5V - Pin 2/4   -----.-------------------------- VIN                      
+                            '----- 10k resistor -------  A0 ----------------- GREEN
+        GND - Pin 6/9  -------------------------------- GND ----------------- BLACK
+        3.3V - Pin 1   ------------------------------------------------------ RED
+        GPIO 4 - Pin 7 ------------------------------------------------------ YELLOW
+
+                .-------------------------------------------------------------------.
+                |            Wind Direction Sensor Voltage Divider Values            |
+                '-------------------------------------------------------------------'
+                   |
+                   '->  .----------------------------------------------------.
+                        | Deg  | Sensor Res. | Calc. Output Volt. (5v, 10kΩ) |
+                        |------|-------------|-------------------------------|
+                        | 0.0  | 33000       | 3.837                         |
+                        | 22.5 | 6570        | 1.982                         |
+                        | 45.0 | 8200        | 2.253                         |
+                        | 67.5 | 891         | 0.409                         |
+                        | 90.0 | 1000        | 0.455                         |
+                        | 112.5| 688         | 0.322                         |
+                        | 135.0| 2200        | 0.902                         |
+                        | 157.5| 1410        | 0.618                         |
+                        | 180.0| 3900        | 1.403                         |
+                        | 202.5| 3140        | 1.195                         |
+                        | 225.0| 16000       | 3.077                         |
+                        | 247.5| 14120       | 2.927                         |
+                        | 270.0| 120000      | 4.615                         |
+                        | 292.5| 42120       | 4.041                         |
+                        | 315.0| 64900       | 4.332                         |
+                        | 337.5| 21880       | 3.432                         |
+                        '----------------------------------------------------'
+```
+
 
 ## Execution
 To run the code, ensure you have Python 3 installed along with the necessary libraries. You can install the required libraries using the following commands:

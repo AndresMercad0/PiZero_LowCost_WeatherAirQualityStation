@@ -1,17 +1,17 @@
-###############################################################################
-#                                                                             #
-#                      ──── LICENSE INFORMATION ────                          #
-#                                                                             #
-# This code is licensed under the MIT License.                                #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  #
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    #
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.                       #
-#                                                                             #
-# In addition, while it is not a requirement of the license, I would greatly  #
-# appreciate it if you give credit to the author,                             #
-# Andres A. Mercado-Velazquez, when using or distributing this code.          #
-#                                                                             #
-###############################################################################
+        ##################################################################################
+        ##                                                                              ##
+        ##                      ──── LICENSE INFORMATION ────                           ##
+        ##                                                                              ##
+        ##  This code is licensed under the MIT License.                                ##
+        ##  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  ##
+        ##  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    ##
+        ##  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.                       ##
+        ##                                                                              ##
+        ##  In addition, while it is not a requirement of the license, I would greatly  ##
+        ##  appreciate it if you give credit to the author,                             ##
+        ##  Andres A. Mercado-Velazquez, when using or distributing this code.          ##
+        ##                                                                              ##
+        ##################################################################################
 
 # Note: Use Python 3 to run the code and enjoy!
 # Note 2: Feel free to contact the author of this code by email at andres@mevel.com.mx
@@ -29,7 +29,7 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
 
 
 '''
-  DATE:             2024-May-31 8:56 PM London Time
+  DATE:             2024-Jun-12 5:45 PM London Time
   AUTHOR:           Andres A. Mercado-Velazquez
   LOCATION:         IoT Lab at Queen Mary University of London
   BOARD:            Raspberry Pi Zero W 2
@@ -45,38 +45,48 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
   ------------------------------------------------------------------------------------------------
                                             I2C
   ------------------------------------------------------------------------------------------------
-
-  ------------- SHT45 -----------------------------------------------------------------------------------------------------------------
+               .-------.
+  -------------| SHT45 |
+               '-------'
   * Pinout     =>      https://learn.adafruit.com/assets/99235
   * Tutorial   =>      https://learn.adafruit.com/adafruit-sht40-temperature-humidity-sensor/python-circuitpython#python-computer-wiring-3082732
   * Library    =>      python3-pip (sudo apt-get install python3-pip)
                           |->  adafruit-circuitpython-sht4x (sudo pip3 install adafruit-circuitpython-sht4x)
 
     SHT45             Raspberry Pi Zero W 2
+    ---------------------------------------
     1 VIN ---------------- 3.3V - Pin 1
     2 GND ---------------- GND - Pin 6
     3 SCL ---------------- SCL - Pin 5
     4 SDA ---------------- SDA - Pin 3
 
-  ------------- SGP40 -----------------------------------------------------------------------------------------------------------------
+
+               .-------.
+  -------------| SGP40 |
+               '-------'
   * Pinout     =>      https://learn.adafruit.com/assets/98203
   * Tutorial   =>      https://learn.adafruit.com/adafruit-sgp40/python-circuitpython#python-computer-wiring-3080640
   * Library    =>      python3-pip (sudo apt-get install python3-pip)
                           |->  adafruit-circuitpython-sgp40 (sudo pip3 install adafruit-circuitpython-sgp40)
 
     SGP40             Raspberry Pi Zero W 2
+    ---------------------------------------
     1 VIN ---------------- 3.3V - Pin 1
     2 GND ---------------- GND - Pin 6
     3 SCL ---------------- SCL - Pin 5
     4 SDA ---------------- SDA - Pin 3
 
-  ------------- SPS30 -----------------------------------------------------------------------------------------------------------------
+
+               .-------.
+  -------------| SPS30 |
+               '-------'
   * Pinout     =>      https://cdn.sparkfun.com/assets/2/d/2/a/6/Sensirion_SPS30_Particulate_Matter_Sensor_v0.9_D1__1_.pdf
   * Tutorial   =>      https://github.com/dvsu/sps30/tree/main?tab=readme-ov-file#sensirion-sps30
   * Library    =>      https://github.com/dvsu/sps30/blob/main/sps30.py
                           |->  The file "sps30.py" from the public repository https://github.com/dvsu/sps30.git is responsible for managing the i2c communication with the SPS30 sensor. This file is invoked by "codeAllSensors.py" and is included in this repository.
 
     SPS30                        Raspberry Pi Zero W 2
+    --------------------------------------------------
     Pin 1 - VDD ---------------- 5V - Pin 2/4
     Pin 2 - SDA ---------------- SDA - Pin 3
     Pin 3 - SCL ---------------- SCL - Pin 5
@@ -95,16 +105,20 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
         |                                '-----------'   |
         |     []          []          []          []     |
         '------------------------------------------------'
-  
-  ------------- Grove - Gas Sensor V2 (Multichannel) -----------------------------------------------------------------------------------------------------------------
+
+
+               .--------------------------------------.
+  -------------| Grove - Gas Sensor V2 (Multichannel) |
+               '--------------------------------------'
   * Pinout     =>      https://wiki.seeedstudio.com/Grove-Multichannel-Gas-Sensor-V2/
   * Source     =>      https://github.com/Seeed-Studio/Seeed_Arduino_MultiGas
   * Library    =>      python3-pip (sudo apt-get install python3-pip)
                                        |->  adafruit-circuitpython-board (sudo pip3 adafruit-circuitpython-board)
 
     Grove Multichannel gas V2         Raspberry Pi Zero W 2
-        1 GND -------------------------- GND - Pin 6
-        2 VCC -------------------------- 5V - Pin 4
+    -------------------------------------------------------
+        1 GND -------------------------- GND - Pin 6/9
+        2 VCC -------------------------- 5V - Pin 2/4
         3 SDA -------------------------- SDA - Pin 3
         4 SCL -------------------------- SCL - Pin 5
 
@@ -126,21 +140,49 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
   ------------------------------------------------------------------------------------------------
                                   Analogue or digital communication
   ------------------------------------------------------------------------------------------------
-  ------------- Wind speed and direction & ADS1115 -------------
+               .------------------------------------.
+  -------------| Wind speed and direction & ADS1115 |
+               '------------------------------------'
   * DOC Weather Meter Kit    =>      https://learn.sparkfun.com/tutorials/weather-meter-hookup-guide
-  * Pinout ADS1115           =>      https://learn.adafruit.com/assets/112709
+  * DOC ADS1115              =>      https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython
   * Tutorial                 =>      https://projects.raspberrypi.org/en/projects/build-your-own-weather-station/5
   * Library                  =>      python3-pip (sudo apt-get install python3-pip)
                                        |->  adafruit-circuitpython-ads1x15 (sudo pip3 install adafruit-circuitpython-ads1x15)
 
-    Raspberry Pi Zero W 2                             ADS1115             Weather Meter Kit
-        GND - Pin 6    -------------------------------- GND ------------------ BLACK
-        3.3V - Pin 1   -----.-------------------------- VIN ------------------ RED
-                            '----- 10k resistor -------  A0 ------------------ GREEN
-        GPIO 4 - Pin 7 ------------------------------------------------------- YELLOW
-        SCL - Pin 5    -------------------------------- SCL
-        SDA - Pin 3    -------------------------------- SDA
+    Raspberry Pi Zero W 2                             ADS1115           Weather Meter Kit
+    -------------------------------------------------------------------------------------
+        SCL - Pin 5    -------------------------------- SCL                      
+        SDA - Pin 3    -------------------------------- SDA                      
+        5V - Pin 2/4   -----.-------------------------- VIN                      
+                            '----- 10k resistor -------  A0 ----------------- GREEN
+        GND - Pin 6/9  -------------------------------- GND ----------------- BLACK
+        3.3V - Pin 1   ------------------------------------------------------ RED
+        GPIO 4 - Pin 7 ------------------------------------------------------ YELLOW
 
+                .-------------------------------------------------------------------.
+                |            Wind Direction Sensor Voltage Divider Values            |
+                '-------------------------------------------------------------------'
+                   |
+                   '->  .----------------------------------------------------.
+                        | Deg  | Sensor Res. | Calc. Output Volt. (5v, 10kΩ) |
+                        |------|-------------|-------------------------------|
+                        | 0.0  | 33000       | 3.837                         |
+                        | 22.5 | 6570        | 1.982                         |
+                        | 45.0 | 8200        | 2.253                         |
+                        | 67.5 | 891         | 0.409                         |
+                        | 90.0 | 1000        | 0.455                         |
+                        | 112.5| 688         | 0.322                         |
+                        | 135.0| 2200        | 0.902                         |
+                        | 157.5| 1410        | 0.618                         |
+                        | 180.0| 3900        | 1.403                         |
+                        | 202.5| 3140        | 1.195                         |
+                        | 225.0| 16000       | 3.077                         |
+                        | 247.5| 14120       | 2.927                         |
+                        | 270.0| 120000      | 4.615                         |
+                        | 292.5| 42120       | 4.041                         |
+                        | 315.0| 64900       | 4.332                         |
+                        | 337.5| 21880       | 3.432                         |
+                        '----------------------------------------------------'        
 '''
 
 
@@ -173,13 +215,13 @@ from MGSv2Lib.multichannel_gas_gmxxx import MultichannelGasGMXXX
 '''
 # Wind Speed - Weather Meter Kit
 WIND_SPEED_SENSOR_PIN = 4
-MEASUREMENT_TIME = 5  # Measurement time in seconds
+MEASUREMENT_TIME = 3  # Measurement time in seconds
 SENSOR_DIAMETER_CM = 18  # Wind speed sensor diameter in cm
 
 # Wind direction values
-SENSOR_MAX = [1800, 2250, 2500, 3325, 4825, 6325, 7425, 10425, 11825, 15325, 16100, 17900, 20000, 21050, 22550, 24000]
-SENSOR_MIN = [1550, 2000, 2251, 3075, 4575, 6075, 7175, 10175, 11575, 15075, 15850, 17650, 19750, 20800, 22300, 23750]
-DIR_DEG = [22.5, 337.5, 0, 67.5, 45, 112.5, 90, 292.5, 315, 157.5, 135, 247.5, 270, 202.5, 225, 180]
+R2_VOL_DIVIDER = [688,   891, 1000, 1410,   2200,  3140,  3900,  6570,  8200, 14120, 16000, 21880, 33000, 42120, 64900, 120000]
+DIR_DEG =      [112.5,  67.5,   90, 157.5,   135, 202.5,   180,  22.5,    45, 247.5,   225, 337.5,     0, 292.5,   315,   270]
+R1_VOL_DIVIDER = 10000 # Voltage divider R1 10k ohms
 
 # Grove - Gas Sensor V2 (Multichannel)
 R0_CO = 31 # This value is obtained from the ambient air and must be determined through sensor calibration, as referenced in the code's initial comments.
@@ -206,8 +248,11 @@ sgp = adafruit_sgp40.SGP40(i2c)
 # Wind Speed - Weather Meter Kit
 wind_speed_sensor = Button(WIND_SPEED_SENSOR_PIN, pull_up=False) # Setup wind sensor as a button
 # Wind Direction - ADS1115 for Weather Meter Kit
-ads = ADS.ADS1115(i2c)
-wind_dir = AnalogIn(ads, ADS.P0)
+ads = ADS.ADS1115(i2c, address=0x48)
+ads.gain = 2/3 # Set ADS1115 gain
+vol_divider_Vout = AnalogIn(ads, ADS.P0) # Read the value of the output voltage of the wind direction sensor
+vol_divider_Vin = AnalogIn(ads, ADS.P3) # Read value of the input voltage read by the ADS
+
 # SPS30
 pm_sensor = SPS30()
 print(f"Firmware version: {pm_sensor.firmware_version()}")
@@ -219,7 +264,6 @@ pm_sensor.start_measurement()
 # Init Grove - Gas Sensor V2 (Multichannel)
 gas_sensor = MultichannelGasGMXXX(i2c)
 time.sleep(5)
-
 
 
 '''
@@ -262,11 +306,14 @@ def calculate_wind_speed():
 #  Wind Direction - ADS1115 for Weather Meter Kit  #
 ####################################################
 def read_wind_direction():
-    incoming = wind_dir.value
-    for i in range(16):
-        if SENSOR_MIN[i] <= incoming <= SENSOR_MAX[i]:
-            return DIR_DEG[i]
-    return None
+    Vout = vol_divider_Vout.voltage
+    Vin = vol_divider_Vin.voltage
+    # Calculate R2 using the formula
+    R2_windDirection = round(((Vout * R1_VOL_DIVIDER) / (Vin - Vout)),3)
+    # Once the value of R2 is obtained, find the closest value to it in the array.
+    closest_value = min(R2_VOL_DIVIDER, key=lambda x: abs(x - R2_windDirection))
+    closer_index = R2_VOL_DIVIDER.index(closest_value)
+    return DIR_DEG[closer_index]
 
 
 
@@ -297,12 +344,10 @@ def main():
         ###################################
         # Read wind direction
         angle = read_wind_direction()
-        if angle is not None:
-            print(f"Wind direction: {angle} degrees")
-        else:
-            print("Wind direction not found")
+        print(f"Wind direction: {angle} degrees")
         # Read wind speed
         calculate_wind_speed()
+
 
         ################
         #  READ SPS30  #
