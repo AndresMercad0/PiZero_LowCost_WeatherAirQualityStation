@@ -29,7 +29,7 @@ Feel free to contact the author by email at andres@mevel.com.mx.
     - **SGP40 (I2C)**
       - [Documentation](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython)
     - **SPS30 (I2C)**
-      - [Documentation](https://learn.adafruit.com/adafruit-sgp40/python-circuitpython)
+      - [Documentation](https://cdn.sparkfun.com/assets/2/d/2/a/6/Sensirion_SPS30_Particulate_Matter_Sensor_v0.9_D1__1_.pdf)
     - **Grove - Multichannel Gas Sensor v2 (I2C)**
       - [Documentation](https://wiki.seeedstudio.com/Grove-Multichannel-Gas-Sensor-V2/)
   - **Analogue or digital communication**
