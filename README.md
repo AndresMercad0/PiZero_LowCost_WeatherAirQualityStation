@@ -12,7 +12,7 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ## Date and Location
 
-- **Date:** 2024-Jun-12 5:45 PM London Time
+- **Date:** 2024-July-22 2:10 PM London Time
 - **Author:** Andres A. Mercado-Velazquez
 - **Location:** IoT Lab at Queen Mary University of London
 
@@ -43,8 +43,9 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 
 ## Software Requirements
-- Python 3 (sudo pip3 install name_of_module)
-- Required Python libraries (name_of_module):
+- Python 3
+- pip3
+- Required Python modules (sudo pip3 install name_of_module):
   - `gpiozero`
   - `adafruit-circuitpython-board`
   - `adafruit-circuitpython-sht4x`
