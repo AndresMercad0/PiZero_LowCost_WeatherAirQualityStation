@@ -30,7 +30,7 @@ Code for Raspberry Pi Zero W 2 that runs the following sensors together:
 
 
 '''
-  DATE:             2024-July-22 2:10 PM London Time
+  DATE:             2024-July-22 3:30 PM London Time
   AUTHOR:           Andres A. Mercado-Velazquez
   LOCATION:         IoT Lab at Queen Mary University of London
   BOARD:            Raspberry Pi Zero W 2
@@ -263,11 +263,6 @@ from sps30library.sps30 import SPS30
 # Grove - Gas Sensor V2 (Multichannel) #
 ########################################
 from MGSv2Lib.multichannel_gas_gmxxx import MultichannelGasGMXXX
-###########################
-# Save data to a CSV file #
-###########################
-import csv  # Library for managing CSV files
-from datetime import datetime  # To manage the date and time
 
 '''
   ------------------------------------------------------------------------------------------------
@@ -408,14 +403,6 @@ def read_wind_direction():
     closer_index = R2_VOL_DIVIDER.index(closest_value)
     return DIR_DEG[closer_index]
 
-###########################
-# Save data to a CSV file #
-###########################
-def save_to_csv(timestamp, co, no2, mq131):
-    with open('sensor_data.csv', mode='a', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow([timestamp, co, no2, mq131])
-
 '''
   ------------------------------------------------------------------------------------------------
                                             MAIN FUNCTION
@@ -499,21 +486,10 @@ def main():
         mq131Value = mq131_signal.value
         print(f"MQ131 Value: {mq131Value}")
 
-        ###########################
-        # Save data to a CSV file #
-        ###########################
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        save_to_csv(timestamp, coValue, no2Value, mq131Value)
 
 
         # Wait before the next measurement
         time.sleep(1)
 
 if __name__ == "__main__":
-    ###########################
-    # Save data to a CSV file #
-    ###########################
-    with open('sensor_data.csv', mode='w', newline='') as file:
-        writer = csv.writer(file)
-        writer.writerow(['Timestamp', 'CO', 'NO2', 'MQ131'])
     main()

@@ -12,7 +12,7 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ## Date and Location
 
-- **Date:** 2024-July-22 2:10 PM London Time
+- **Date:** 2024-July-22 3:30 PM London Time
 - **Author:** Andres A. Mercado-Velazquez
 - **Location:** IoT Lab at Queen Mary University of London
 
