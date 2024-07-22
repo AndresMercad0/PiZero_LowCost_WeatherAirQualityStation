@@ -37,6 +37,9 @@ Feel free to contact the author by email at andres@mevel.com.mx.
       - [Documentation](https://learn.sparkfun.com/tutorials/weather-meter-hookup-guide)
       - **ADS1115**
         - [Documentation](https://learn.adafruit.com/adafruit-4-channel-adc-breakouts/python-circuitpython)
+      - **MQ131 Ozone Gas Sensor**
+        - [Documentation](https://cdn.sparkfun.com/assets/9/9/6/e/4/mq131-datasheet-low.pdf)
+
 
 
 ## Software Requirements
@@ -105,42 +108,28 @@ Feel free to contact the author by email at andres@mevel.com.mx.
 
 ### Wind Speed and Direction (Sparkfun Weather Meter Ki) & ADS1115
 ```
-    Raspberry Pi Zero W 2                             ADS1115           Weather Meter Kit
-    -------------------------------------------------------------------------------------
+    Raspberry Pi Zero W 2                             ADS1115                               Weather Meter Kit
+    ----------------------------------------------------------------------------------------------------------
         SCL - Pin 5    -------------------------------- SCL                      
         SDA - Pin 3    -------------------------------- SDA                      
-        5V - Pin 2/4   -----.-------------------------- VIN                      
-                            '----- 10k resistor -------  A0 ----------------- GREEN
-        GND - Pin 6/9  -------------------------------- GND ----------------- BLACK
-        3.3V - Pin 1   ------------------------------------------------------ RED
-        GPIO 4 - Pin 7 ------------------------------------------------------ YELLOW
-
-                .-------------------------------------------------------------------.
-                |            Wind Direction Sensor Voltage Divider Values            |
-                '-------------------------------------------------------------------'
-                   |
-                   '->  .----------------------------------------------------.
-                        | Deg  | Sensor Res. | Calc. Output Volt. (5v, 10kΩ) |
-                        |------|-------------|-------------------------------|
-                        | 0.0  | 33000       | 3.837                         |
-                        | 22.5 | 6570        | 1.982                         |
-                        | 45.0 | 8200        | 2.253                         |
-                        | 67.5 | 891         | 0.409                         |
-                        | 90.0 | 1000        | 0.455                         |
-                        | 112.5| 688         | 0.322                         |
-                        | 135.0| 2200        | 0.902                         |
-                        | 157.5| 1410        | 0.618                         |
-                        | 180.0| 3900        | 1.403                         |
-                        | 202.5| 3140        | 1.195                         |
-                        | 225.0| 16000       | 3.077                         |
-                        | 247.5| 14120       | 2.927                         |
-                        | 270.0| 120000      | 4.615                         |
-                        | 292.5| 42120       | 4.041                         |
-                        | 315.0| 64900       | 4.332                         |
-                        | 337.5| 21880       | 3.432                         |
-                        '----------------------------------------------------'
+        5V - Pin 2/4   --.--.-------------------------- VIN                      
+                         |  '--------------------------  A3 (Input voltage reference)
+                         '-------- 10k resistor -------  A0 ------------------------------------- GREEN
+        GND - Pin 6/9  -------------------------------- GND ------------------------------------- BLACK
+        3.3V - Pin 1   -------------------------------------------------------------------------- RED
+        GPIO 4 - Pin 7 -------------------------------------------------------------------------- YELLOW
 ```
 
+### MQ131 (with FC-22 Board) [Ozone Gas Sensor] & ADS1115
+```
+    Raspberry Pi Zero W 2              ADS1115          MQ131 (with FC-22 Board)
+    ----------------------------------------------------------------------------
+        SCL - Pin 5    ----------------- SCL
+        SDA - Pin 3    ----------------- SDA
+        5V - Pin 2/4   ----------------- VIN ----------------- VCC
+        GND - Pin 6/9  ----------------- GND ----------------- GND
+                                          A1 ----------------- A0
+```
 
 ## Execution
 To run the code, ensure you have Python 3 installed along with the necessary libraries. You can install the required libraries using the following commands:
@@ -161,7 +150,7 @@ git clone https://github.com/AndresMercad0/RPi-MultichannelGasV2-PythonLib.git
 ```
 2. Run the code with the command:
 ```bash
-python3 GroveMGSv2.py
+python3 codeAllSensors.py
 ```
 
 
@@ -182,7 +171,7 @@ python3 GroveMGSv2.py
 - [x] Wind speed and direction (Sparkfun Weather Meter Kit) & ADS1115 (I2C)
 - [x] SPS30 (I2C)
 - [x] Grove Multichannel Gas Sensor V2 (I2C)
-- [ ] MQ131 & ADS1115 (I2C)
+- [x] MQ131 & ADS1115 (I2C)
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
